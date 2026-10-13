@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}My Applications | Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    .applications-page {
+        max-width: 1040px;
+        margin: 8px auto 0;
+    }
+
+    .applications-heading {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .applications-heading h1 {
+        margin: 0 0 7px;
+        color: #172033;
+        font-size: 2rem;
+    }
+
+    .applications-heading p {
+        margin: 0;
+        color: #647084;
+        line-height: 1.5;
+    }
+
+    .application-count {
+        flex: 0 0 auto;
+        padding: 10px 14px;
+        border: 1px solid #dbe3ee;
+        border-radius: 6px;
+        background: #fff;
+        color: #344054;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .applications-list {
+        overflow: hidden;
+        border: 1px solid #e0e6ee;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+    }
+
+    .applications-list-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e7ebf0;
+        color: #667085;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .application-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border-bottom: 1px solid #edf0f4;
+    }
+
+    .application-row:last-child {
+        border-bottom: 0;
+    }
+
+    .application-title {
+        display: inline-block;
+        margin-bottom: 6px;
+        color: #1d4ed8;
+        font-size: 1.05rem;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .application-title:hover {
+        text-decoration: underline;
+    }
+
+    .application-company {
+        margin: 0;
+        color: #344054;
+        font-weight: 600;
+    }
+
+    .application-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px 16px;
+        margin-top: 8px;
+        color: #667085;
+        font-size: 0.88rem;
+    }
+
+    .application-action {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 13px;
+        border: 1px solid #d0d8e4;
+        border-radius: 5px;
+        color: #25324a;
+        font-size: 0.88rem;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .application-action:hover {
+        border-color: #2563eb;
+        color: #1d4ed8;
+    }
+
+    .applications-empty {
+        padding: 54px 24px;
+        border: 1px solid #e0e6ee;
+        border-radius: 8px;
+        background: #fff;
+        text-align: center;
+    }
+
+    .applications-empty h2 {
+        margin: 0 0 8px;
+        color: #172033;
+        font-size: 1.25rem;
+    }
+
+    .applications-empty p {
+        margin: 0 auto 20px;
+        color: #667085;
+        line-height: 1.6;
+    }
+
+    .browse-jobs {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 15px;
+        border-radius: 5px;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .browse-jobs:hover {
+        background: #1d4ed8;
+    }
+
+    @media (max-width: 600px) {
+        .applications-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .application-row {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .application-action {
+            justify-self: start;
+        }
+    }
+</style>
+
+<main class="applications-page">
+    <header class="applications-heading">
+        <div>
+            <h1>My Applications</h1>
+            <p>Keep track of the jobs you have applied for.</p>
+        </div>
+        <div class="application-count">
+            {{ applications|length }} application{{ applications|length|pluralize }}
+        </div>
+    </header>
+
+    {% if applications %}
+        <section class="applications-list" aria-label="Your submitted applications">
+            <div class="applications-list-header">Submitted applications</div>
+            {% for application in applications %}
+                <article class="application-row">
+                    <div>
+                        <a class="application-title" href="{% url 'jobs:job_detail' application.job.pk %}">{{ application.job.title }}</a>
+                        <p class="application-company">{{ application.job.company_name }}</p>
+                        <div class="application-meta">
+                            <span>{{ application.job.location }}</span>
+                            <span>Applied {{ application.date_applied|date:"M j, Y" }}</span>
+                        </div>
+                    </div>
+                    <a class="application-action" href="{% url 'jobs:job_detail' application.job.pk %}">View job</a>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="applications-empty">
+            <h2>No applications yet</h2>
+            <p>When you apply for a job, it will appear here so you can find it again.</p>
+            <a class="browse-jobs" href="{% url 'jobs:job_list' %}">Browse jobs</a>
+        </section>
+    {% endif %}
+</main>
+{% endblock %}

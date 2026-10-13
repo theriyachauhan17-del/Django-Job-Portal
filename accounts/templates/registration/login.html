@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Log In | Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    .auth-page { max-width: 500px; margin: 28px auto; }
+    .auth-panel { padding: 30px; border: 1px solid #e0e6ee; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05); }
+    .auth-panel h1 { margin: 0 0 8px; color: #172033; font-size: 1.7rem; }
+    .auth-intro { margin: 0 0 24px; color: #667085; line-height: 1.5; }
+    .auth-panel form { display: grid; gap: 16px; }
+    .auth-panel form p { display: grid; gap: 6px; margin: 0; color: #344054; font-size: 0.9rem; font-weight: 600; }
+    .auth-panel input { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #cfd7e2; border-radius: 5px; background: #fff; color: #172033; font: inherit; font-weight: 400; }
+    .auth-panel input:focus { border-color: #2563eb; outline: 3px solid rgba(37, 99, 235, 0.13); }
+    .auth-panel ul { margin: 0; padding-left: 18px; color: #b42318; font-size: 0.82rem; font-weight: 400; }
+    .auth-submit { min-height: 44px; border: 0; border-radius: 5px; background: #2563eb; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+    .auth-submit:hover { background: #1d4ed8; }
+    .auth-footer { margin: 20px 0 0; color: #667085; text-align: center; font-size: 0.9rem; }
+    .auth-footer a { color: #1d4ed8; font-weight: 700; text-decoration: none; }
+    @media (max-width: 540px) { .auth-panel { padding: 24px 18px; } }
+</style>
+
+<main class="auth-page">
+    <section class="auth-panel">
+        <h1>Welcome back</h1>
+        <p class="auth-intro">Log in to continue to your Job Portal account.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="auth-submit" type="submit">Log In</button>
+        </form>
+        <p class="auth-footer">Need an account? <a href="{% url 'accounts:signup' %}">Create one</a></p>
+    </section>
+</main>
+{% endblock %}

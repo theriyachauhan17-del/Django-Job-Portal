@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ object.title }} | Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    .delete-page { max-width: 620px; margin: 48px auto; }
+    .delete-panel { padding: 28px; border: 1px solid #e0e6ee; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05); }
+    .delete-panel h1 { margin: 0 0 10px; color: #172033; font-size: 1.5rem; }
+    .delete-panel p { margin: 0; color: #667085; line-height: 1.6; }
+    .delete-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .delete-actions button, .delete-actions a { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 9px 15px; border: 1px solid #d0d8e4; border-radius: 5px; background: #fff; color: #344054; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .delete-actions button { border-color: #b42318; background: #b42318; color: #fff; }
+    .delete-actions button:hover { background: #912018; }
+</style>
+
+<main class="delete-page">
+    <section class="delete-panel">
+        <h1>Delete job listing?</h1>
+        <p>This will permanently remove <strong>{{ object.title }}</strong> and its listing from the portal.</p>
+        <form method="post" class="delete-actions">
+            {% csrf_token %}
+            <button type="submit">Delete Job</button>
+            <a href="{% url 'jobs:job_detail' object.pk %}">Keep Job</a>
+        </form>
+    </section>
+</main>
+{% endblock %}

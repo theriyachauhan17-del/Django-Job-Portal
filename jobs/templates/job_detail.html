@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} | Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    .job-detail-page { max-width: 920px; margin: 8px auto 0; }
+    .job-back-link { display: inline-flex; margin-bottom: 16px; color: #315b9a; font-size: 0.9rem; font-weight: 700; text-decoration: none; }
+    .job-back-link:hover { text-decoration: underline; }
+    .job-detail-card { overflow: hidden; border: 1px solid #e0e6ee; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05); }
+    .job-detail-header { padding: 28px; border-bottom: 1px solid #e7ebf0; }
+    .job-detail-header h1 { margin: 0 0 14px; color: #172033; font-size: 2rem; line-height: 1.2; }
+    .job-detail-meta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #667085; font-size: 0.95rem; }
+    .job-salary { margin-top: 18px; color: #136c5b; font-size: 1.1rem; font-weight: 800; }
+    .job-detail-body { padding: 26px 28px 28px; }
+    .job-detail-body h2 { margin: 0 0 12px; color: #172033; font-size: 1.15rem; }
+    .job-description { margin: 0; color: #475467; line-height: 1.8; white-space: pre-line; }
+    .job-detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #edf0f4; }
+    .job-detail-button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 9px 15px; border: 1px solid #d0d8e4; border-radius: 5px; color: #344054; font-weight: 700; text-decoration: none; }
+    .job-detail-button.primary { border-color: #2563eb; background: #2563eb; color: #fff; }
+    .job-detail-button.primary:hover { border-color: #1d4ed8; background: #1d4ed8; }
+    .job-detail-button.secondary:hover { border-color: #2563eb; color: #1d4ed8; }
+    .application-status { padding: 10px 13px; border: 1px solid #a7d8c6; border-radius: 5px; background: #effaf5; color: #17634e; font-size: 0.9rem; font-weight: 700; }
+    @media (max-width: 600px) {
+        .job-detail-header, .job-detail-body { padding: 22px 18px; }
+        .job-detail-header h1 { font-size: 1.65rem; }
+    }
+</style>
+
+<main class="job-detail-page">
+    <a href="{% url 'jobs:job_list' %}" class="job-back-link">&larr; Back to jobs</a>
+    <article class="job-detail-card">
+        <header class="job-detail-header">
+            <h1>{{ job.title }}</h1>
+            <div class="job-detail-meta">
+                <strong>{{ job.company_name }}</strong>
+                <span>{{ job.location }}</span>
+                <span>Posted {{ job.date_posted|date:"M j, Y" }}</span>
+            </div>
+            <div class="job-salary">${{ job.salary }}</div>
+        </header>
+        <section class="job-detail-body">
+            <h2>About this role</h2>
+            <p class="job-description">{{ job.description }}</p>
+            <div class="job-detail-actions">
+                {% if user.is_authenticated %}
+                    {% if already_Applied %}
+                        <div class="application-status">You have already applied for this job.</div>
+                    {% else %}
+                        <form method="post" action="{% url 'jobs:apply_to_job' job.pk %}">
+                            {% csrf_token %}
+                            <button class="job-detail-button primary" type="submit">Apply Now</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a class="job-detail-button primary" href="{% url 'accounts:login' %}">Log in to Apply</a>
+                {% endif %}
+                <a class="job-detail-button secondary" href="{% url 'jobs:job_list' %}">Browse More Jobs</a>
+            </div>
+        </section>
+    </article>
+</main>
+{% endblock %}

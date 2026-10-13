@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Django local data and generated files
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example

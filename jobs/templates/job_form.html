@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit Job{% else %}Post a Job{% endif %} | Job Portal{% endblock %}
+
+{% block content %}
+<style>
+    .job-form-wrap {
+        max-width: 980px;
+        margin: 4px auto 0;
+    }
+
+    .job-form-card {
+        max-width: 760px;
+        background: #fff;
+        padding: 28px 30px 30px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .job-form-card h1 {
+        margin: 0 0 22px;
+        color: #111827;
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+
+    .job-form-card form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .job-form-card form p {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin: 0;
+        color: #374151;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .job-form-card input,
+    .job-form-card textarea,
+    .job-form-card select {
+        width: 100%;
+        min-height: 42px;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        background: #fff;
+        color: #111827;
+        font: inherit;
+        font-weight: 400;
+    }
+
+    .job-form-card input:focus,
+    .job-form-card textarea:focus,
+    .job-form-card select:focus {
+        border-color: #2563eb;
+        outline: 3px solid rgba(37, 99, 235, 0.13);
+    }
+
+    .job-form-card textarea {
+        min-height: 140px;
+        resize: vertical;
+    }
+
+    .job-form-card .helptext {
+        color: #6b7280;
+        font-size: 0.8rem;
+        font-weight: 400;
+    }
+
+    .job-form-card ul.errorlist {
+        margin: 0;
+        padding-left: 18px;
+        color: #b91c1c;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 6px;
+    }
+
+    .form-actions .btn {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 16px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .form-actions .primary {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .form-actions .primary:hover {
+        background: #1d4ed8;
+    }
+
+    .form-actions .secondary {
+        border-color: #d1d5db;
+        background: #fff;
+        color: #374151;
+    }
+
+    @media (max-width: 640px) {
+        .job-form-card {
+            padding: 22px 18px;
+        }
+    }
+</style>
+
+<main class="job-form-wrap">
+    <section class="job-form-card">
+        <h1>{% if form.instance.pk %}Edit Job{% else %}Post a Job{% endif %}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button class="btn primary" type="submit">{% if form.instance.pk %}Save Changes{% else %}Post Job{% endif %}</button>
+                <a class="btn secondary" href="{% url 'jobs:job_list' %}">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}
