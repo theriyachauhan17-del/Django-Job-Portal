@@ -1,3 +1,6 @@
+from rest_framework import generics, filters
+from rest_framework.pagination import PageNumberPagination
+from .serializers import JobSerializer
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
@@ -9,6 +12,15 @@ from django.urls import reverse_lazy
 
 from .forms import JobForm
 from .models import Application, Job
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.exceptions import PermissionDenied
+from .permissions import IsEmployer, IsJobOwner
+from .serializers import JobCreateSerializer
+from .permissions import IsSeeker
+from .serializers import ApplicationCreateSerializer
 
 
 class EmployerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -114,6 +126,73 @@ def seeker_dashboard(request):
         'applications': applications,
     }
     return render(request, 'seeker_dashboard.html', context)
+
+
+class JobListAPIView(generics.ListAPIView):
+    serializer_class = JobSerializer
+
+    def get_queryset(self):
+        return Job.objects.select_related("posted_by").all()
+
+class JobPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = "page_size"
+    max_page_size = 20
+
+
+class JobListAPIView(generics.ListAPIView):
+    serializer_class = JobSerializer
+    pagination_class = JobPagination
+
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+
+    search_fields = [
+        "title",
+        "company_name",
+        "description",
+        "location",
+    ]
+
+    ordering_fields = [
+        "date_posted",
+        "salary",
+        "title",
+    ]
+
+    ordering = ["-date_posted"]
+
+    def get_queryset(self):
+        return Job.objects.select_related("posted_by").all()
+
+
+class JobCreateAPIView(generics.CreateAPIView):
+    serializer_class = JobCreateSerializer
+    permission_classes = [IsAuthenticated, IsEmployer]
+
+    def perform_create(self, serializer):
+        serializer.save(posted_by=self.request.user)
+
+
+class JobManageAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = JobCreateSerializer
+    permission_classes = [IsAuthenticated, IsEmployer, IsJobOwner]
+
+    def get_queryset(self):
+        return Job.objects.select_related("posted_by").all()
+
+
+class JobApplicationCreateAPIView(generics.CreateAPIView):
+    serializer_class = ApplicationCreateSerializer
+    permission_classes = [IsAuthenticated, IsSeeker]
+
+    def perform_create(self, serializer):
+        serializer.save(applicant=self.request.user)
+
+
+
 
 
 

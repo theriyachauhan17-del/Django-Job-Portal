@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('jobs.urls', namespace='jobs')),
     path('home/', views.JobListView.as_view(), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
+    
 ]

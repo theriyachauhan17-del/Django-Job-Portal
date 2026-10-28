@@ -14,4 +14,11 @@ urlpatterns = [
     path('<int:pk>/edit/', views.JobUpdateView.as_view(), name='job_update'),
     path('<int:pk>/delete/', views.JobDeleteView.as_view(), name='job_delete'),
     path('<int:pk>/apply/', views.apply_to_job, name='apply_to_job'),
+
+    # New REST API route
+    path('api/jobs/', views.JobListAPIView.as_view(), name='api_job_list'),
+    path("api/jobs/create/", views.JobCreateAPIView.as_view(), name="api_job_create"),
+    path("api/jobs/<int:pk>/manage/", views.JobManageAPIView.as_view(), name="api_job_manage"),
+    path("api/applications/", views.JobApplicationCreateAPIView.as_view(), name="api_application_create"),
+    
 ]
