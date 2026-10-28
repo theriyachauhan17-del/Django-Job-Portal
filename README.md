@@ -1,96 +1,132 @@
-# Job Portal
+# Django Job Portal
 
-A Django job portal with separate employer and job-seeker experiences. Employers can publish and manage listings; job seekers can search jobs and track their applications.
+A job portal built with Django and Django REST Framework that connects job seekers with employers. Employers can publish and manage job listings, while job seekers can search for jobs and track their applications.
 
 ## Features
 
-- Custom user roles for employers and job seekers
-- Account registration, login, and logout
-- Job listing search by keyword and location
-- Employer dashboard for managing listings and viewing applicants
-- Job seeker dashboard for tracking applications
-- Protected job creation and owner-only job updates/deletion
-- CSRF-protected job applications with duplicate-submission protection
-- Responsive templates for the main workflows
+### Website
+- Custom user model with job seeker and employer roles
+- User registration, login, and logout
+- Job search by keyword and location
+- Employer dashboard to manage job listings and view applicants
+- Job seeker dashboard to track applications
+- Duplicate application prevention
+- Responsive HTML templates
 
-## Technology
+### REST API
+- Public job listing endpoint with search, ordering, and pagination
+- Employer-only job creation
+- Owner-only job updates and deletion
+- Job seeker application submission
+- Duplicate application prevention
+- Role-based application listing
+- Authentication and permission checks
+
+## Technology Stack
 
 - Python
-- Django 6.1
+- Django 6.1.2
+- Django REST Framework 3.18.3
 - SQLite for local development
+- HTML and CSS
+- Git and GitHub
 
-## Setup on Windows
+## Installation
 
-Run these commands from the folder that contains `manage.py`:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/theriyachauhan17-del/Django-Job-Portal.git
+cd Django-Job-Portal
+```
+
+### 2. Create and activate a virtual environment
+
+Windows PowerShell:
 
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```powershell
 python -m pip install -r requirements.txt
+```
+
+### 4. Run database migrations
+
+```powershell
 python manage.py migrate
+```
+
+### 5. Create an administrator
+
+```powershell
 python manage.py createsuperuser
+```
+
+### 6. Start the development server
+
+```powershell
 python manage.py runserver
 ```
 
-Open `http://127.0.0.1:8000/` in your browser. Create an account through the signup page to try the job-seeker flow. To use employer features, create an account with the employer role.
+Open http://127.0.0.1:8000/ in your browser.
 
-If PowerShell blocks virtual-environment activation, run the commands using `..\venv\Scripts\python.exe` if you already have that environment, or configure your local PowerShell execution policy according to your organization's guidance.
+## API Endpoints
 
-## Environment Configuration
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/jobs/` | List and search jobs |
+| POST | `/api/jobs/create/` | Create a job as an employer |
+| GET | `/api/jobs/<id>/manage/` | Retrieve a managed job |
+| PATCH | `/api/jobs/<id>/manage/` | Update an owned job |
+| DELETE | `/api/jobs/<id>/manage/` | Delete an owned job |
+| POST | `/api/applications/` | Apply for a job as a seeker |
+| GET | `/api/applications/list/` | List applications permitted for the logged-in user |
 
-Local development defaults to `DEBUG=True`, `localhost` and `127.0.0.1`, and a development-only secret key. The development key must never be used in production.
+Protected endpoints require authentication and appropriate role or ownership permissions. Confirm the exact methods and permissions against the current URL configuration and views.
 
-Before deploying, configure these environment variables in your hosting provider:
+## Testing
 
-- `DJANGO_DEBUG=False`
-- `DJANGO_SECRET_KEY`: a newly generated, private Django secret key
-- `DJANGO_ALLOWED_HOSTS`: comma-separated hostnames for the deployed site, such as `jobs.example.com`
-
-Generate a secret key with:
-
-```powershell
-python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-```
-
-Copy the generated value directly into your hosting provider's secret/environment-variable settings. Do not commit the value or paste it into this README. When `DJANGO_DEBUG=False`, the application refuses to start without `DJANGO_SECRET_KEY`.
-
-## Tests
-
-Run the full test suite with:
+Run the complete test suite:
 
 ```powershell
-python manage.py test jobs accounts
+python manage.py test
 ```
 
-The tests cover account signup, role-based access, dashboards, job applications, and keyword/location search.
+The project currently has 31 automated tests covering website workflows, API functionality, authentication, permissions, and application handling.
 
 ## Screenshots
 
-Capture screenshots from the running app so they reflect the current version. Useful screens for a portfolio README are:
+Add screenshots of the homepage, job details, employer dashboard, applications dashboard, and API responses in a `screenshots/` folder. Embed them here after capturing the actual running application.
 
-- Homepage with search and job listings
-- Job details with the Apply action
-- Employer dashboard with a job listing
-- My Applications dashboard
-- Signup or login screen
+## Security and Deployment
 
-On Windows, open each page in the browser and use `Win+Shift+S` to capture it. Save the images in a `screenshots` folder at the project root, using names such as `home.png`, `job-detail.png`, `employer-dashboard.png`, and `applications.png`. Then embed them here with Markdown, for example:
+- Keep production secrets out of Git.
+- Set `DJANGO_DEBUG=False` in production.
+- Configure a private `DJANGO_SECRET_KEY` and appropriate `DJANGO_ALLOWED_HOSTS`.
+- Use HTTPS and review secure-cookie and API authentication settings.
+- Configure production database and static-file serving.
+- Run Django's deployment checks before launch.
 
-```markdown
-![Job Portal homepage](screenshots/home.png)
-```
-
-Only include screenshots that do not expose personal information, email addresses, or real applicant data.
+SQLite and the console email backend are intended for development; configure production alternatives as needed.
 
 ## Project Structure
 
 ```text
-accounts/   Custom user model, authentication, and signup
-jobs/       Job/application models, views, tests, and templates
-jobportal/  Django project settings and root URL configuration
-manage.py  Django management entry point
+accounts/    Custom user model and account functionality
+jobs/        Job and application models, views, serializers, permissions, and tests
+jobportal/   Django settings and URL configuration
+manage.py    Django management utility
+requirements.txt
+README.md
 ```
 
-## Notes
+## Author
 
-SQLite is configured for local development. Before a public production deployment, use the hosting platform's recommended database and review Django's deployment checklist, HTTPS, static-file handling, backups, and logging.
+**Riya Chauhan**
+
+GitHub: [@theriyachauhan17-del](https://github.com/theriyachauhan17-del)
