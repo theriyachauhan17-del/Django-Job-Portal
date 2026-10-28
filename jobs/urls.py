@@ -20,5 +20,5 @@ urlpatterns = [
     path("api/jobs/create/", views.JobCreateAPIView.as_view(), name="api_job_create"),
     path("api/jobs/<int:pk>/manage/", views.JobManageAPIView.as_view(), name="api_job_manage"),
     path("api/applications/", views.JobApplicationCreateAPIView.as_view(), name="api_application_create"),
-    
+    path("api/applications/list/", views.ApplicationListAPIView.as_view(), name="api_application_list"),
 ]

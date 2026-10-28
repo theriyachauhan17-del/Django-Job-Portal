@@ -21,6 +21,7 @@ from .permissions import IsEmployer, IsJobOwner
 from .serializers import JobCreateSerializer
 from .permissions import IsSeeker
 from .serializers import ApplicationCreateSerializer
+from .serializers import ApplicationSerializer
 
 
 class EmployerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -190,6 +191,30 @@ class JobApplicationCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(applicant=self.request.user)
+
+
+
+class ApplicationListAPIView(generics.ListAPIView):
+    serializer_class = ApplicationSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = JobPagination
+    
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.role == "seeker":
+            return Application.objects.filter(
+                applicant=user
+        ).select_related("job", "applicant").order_by("-date_applied", "-id")
+
+        if user.role == "employer":
+            return Application.objects.filter(
+                job__posted_by=user
+            ).select_related("job", "applicant").order_by("-date_applied", "-id")
+
+        return Application.objects.none()
+
+
 
 
 

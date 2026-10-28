@@ -44,3 +44,32 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "date_applied"]
 
 
+class ApplicationSerializer(serializers.ModelSerializer):
+    job_title = serializers.CharField(
+        source="job.title",
+        read_only=True,
+    )
+    company_name = serializers.CharField(
+        source="job.company_name",
+        read_only=True,
+    )
+    applicant_username = serializers.CharField(
+        source="applicant.username",
+        read_only=True,
+    )
+
+    class Meta:
+        model = Application
+        fields = [
+            "id",
+            "job",
+            "job_title",
+            "company_name",
+            "applicant",
+            "applicant_username",
+            "date_applied",
+        ]
+        read_only_fields = fields
+
+
+

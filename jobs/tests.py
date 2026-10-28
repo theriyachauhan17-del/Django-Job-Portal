@@ -425,3 +425,97 @@ class JobApplicationAPITests(APITestCase):
         self.assertIn(response.status_code, [401, 403])
         self.assertEqual(Application.objects.count(), 0)
 
+
+class ApplicationListAPITests(APITestCase):
+    def setUp(self):
+        self.employer1 = CustomUser.objects.create_user(
+            username="list-employer-1",
+            password="StrongPass123!",
+            role="employer",
+        )
+        self.employer2 = CustomUser.objects.create_user(
+            username="list-employer-2",
+            password="StrongPass123!",
+            role="employer",
+        )
+        self.seeker1 = CustomUser.objects.create_user(
+            username="list-seeker-1",
+            password="StrongPass123!",
+            role="seeker",
+        )
+        self.seeker2 = CustomUser.objects.create_user(
+            username="list-seeker-2",
+            password="StrongPass123!",
+            role="seeker",
+        )
+
+        self.job1 = Job.objects.create(
+            title="Python Developer",
+            company_name="Company One",
+            description="Django development.",
+            location="Remote",
+            salary="60000.00",
+            posted_by=self.employer1,
+        )
+        self.job2 = Job.objects.create(
+            title="Backend Developer",
+            company_name="Company Two",
+            description="API development.",
+            location="Remote",
+            salary="65000.00",
+            posted_by=self.employer2,
+        )
+
+        self.application1 = Application.objects.create(
+            job=self.job1,
+            applicant=self.seeker1,
+        )
+        self.application2 = Application.objects.create(
+            job=self.job2,
+            applicant=self.seeker2,
+        )
+
+        self.url = reverse("jobs:api_application_list")
+
+    def test_seeker_sees_only_own_applications(self):
+        self.client.force_authenticate(user=self.seeker1)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["applicant"],
+            self.seeker1.pk,
+        )
+
+    def test_employer_sees_only_applications_for_own_jobs(self):
+        self.client.force_authenticate(user=self.employer1)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["job"],
+            self.job1.pk,
+        )
+
+    def test_anonymous_user_cannot_list_applications(self):
+        response = self.client.get(self.url)
+
+        self.assertIn(response.status_code, [401, 403])
+
+    def test_seeker_with_no_applications_gets_empty_list(self):
+        seeker3 = CustomUser.objects.create_user(
+            username="list-seeker-3",
+            password="StrongPass123!",
+            role="seeker",
+        )
+        self.client.force_authenticate(user=seeker3)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 0)
+
