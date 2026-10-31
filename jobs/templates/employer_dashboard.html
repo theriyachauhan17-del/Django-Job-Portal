@@ -12,8 +12,20 @@
     .dashboard-primary { background: #2563eb; color: #fff; }
     .dashboard-primary:hover { background: #1d4ed8; }
     .job-list { display: grid; gap: 16px; }
-    .employer-job { overflow: hidden; border: 1px solid #e0e6ee; border-radius: 8px; background: #fff; box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04); }
-    .employer-job-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 20px; }
+    .employer-job {
+        overflow: hidden;
+        border: 1px solid #e0e6ee;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+        transition: 0.2s ease;
+    }
+
+    .employer-job:hover {
+        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.10);
+    }
+
+.employer-job-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 20px; }
     .employer-job h2 { margin: 0 0 8px; color: #172033; font-size: 1.2rem; }
     .job-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; color: #667085; font-size: 0.9rem; }
     .job-actions { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -49,8 +61,9 @@
                             <h2>{{ job.title }}</h2>
                             <div class="job-meta">
                                 <span>{{ job.company_name }}</span>
-                                <span>{{ job.location }}</span>
-                                <span>${{ job.salary }}</span>
+                                <span>📍 {{ job.location|default:"Location not specified" }}</span>
+                                <span>💰 ₹{{ job.salary|floatformat:0 }}</span>
+                                <span>📅 Posted {{ job.date_posted|date:"d M Y" }}</span>
                             </div>
                         </div>
                         <div class="job-actions">

@@ -5,7 +5,14 @@
 {% block content %}
 <style>
     .auth-page { max-width: 500px; margin: 28px auto; }
-    .auth-panel { padding: 30px; border: 1px solid #e0e6ee; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05); }
+    .auth-panel {
+        padding: 32px;
+        border: 1px solid #e0e6ee;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+    }
+
     .auth-panel h1 { margin: 0 0 8px; color: #172033; font-size: 1.7rem; }
     .auth-intro { margin: 0 0 24px; color: #667085; line-height: 1.5; }
     .auth-panel form { display: grid; gap: 16px; }
@@ -17,6 +24,14 @@
     .auth-submit:hover { background: #1d4ed8; }
     .auth-footer { margin: 20px 0 0; color: #667085; text-align: center; font-size: 0.9rem; }
     .auth-footer a { color: #1d4ed8; font-weight: 700; text-decoration: none; }
+    .auth-error {
+        padding: 12px;
+        border: 1px solid #fecdca;
+        border-radius: 8px;
+        background: #fef3f2;
+        color: #b42318;
+        font-size: 0.9rem;
+    }
     @media (max-width: 540px) { .auth-panel { padding: 24px 18px; } }
 </style>
 
@@ -26,6 +41,11 @@
         <p class="auth-intro">Log in to continue to your Job Portal account.</p>
         <form method="post">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="auth-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
             {{ form.as_p }}
             <button class="auth-submit" type="submit">Log In</button>
         </form>

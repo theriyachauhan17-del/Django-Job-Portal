@@ -14,10 +14,33 @@
     .auth-panel input:focus, .auth-panel select:focus { border-color: #2563eb; outline: 3px solid rgba(37, 99, 235, 0.13); }
     .auth-panel .helptext { color: #667085; font-size: 0.8rem; font-weight: 400; }
     .auth-panel ul { margin: 0; padding-left: 18px; color: #b42318; font-size: 0.82rem; font-weight: 400; }
-    .auth-submit { min-height: 44px; border: 0; border-radius: 5px; background: #2563eb; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+    .auth-submit {
+        min-height: 46px;
+        border: 0;
+        border-radius: 8px;
+        background: #063b63;
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .auth-submit:hover {
+        background: #052d4b;
+    }
+
     .auth-submit:hover { background: #1d4ed8; }
     .auth-footer { margin: 20px 0 0; color: #667085; text-align: center; font-size: 0.9rem; }
     .auth-footer a { color: #1d4ed8; font-weight: 700; text-decoration: none; }
+    .auth-error {
+        padding: 12px;
+        border: 1px solid #fecdca;
+        border-radius: 8px;
+        background: #fef3f2;
+        color: #b42318;
+        font-size: 0.9rem;
+    }
     @media (max-width: 540px) { .auth-panel { padding: 24px 18px; } }
 </style>
 

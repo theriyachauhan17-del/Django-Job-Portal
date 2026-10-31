@@ -7,7 +7,19 @@
     .job-detail-page { max-width: 920px; margin: 8px auto 0; }
     .job-back-link { display: inline-flex; margin-bottom: 16px; color: #315b9a; font-size: 0.9rem; font-weight: 700; text-decoration: none; }
     .job-back-link:hover { text-decoration: underline; }
-    .job-detail-card { overflow: hidden; border: 1px solid #e0e6ee; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05); }
+    .job-detail-card {
+        overflow: hidden;
+        border: 1px solid #e0e6ee;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+        transition: 0.2s ease;
+    }
+
+    .job-detail-card:hover {
+        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.10);
+    }
+
     .job-detail-header { padding: 28px; border-bottom: 1px solid #e7ebf0; }
     .job-detail-header h1 { margin: 0 0 14px; color: #172033; font-size: 2rem; line-height: 1.2; }
     .job-detail-meta { display: flex; flex-wrap: wrap; gap: 8px 18px; color: #667085; font-size: 0.95rem; }
@@ -34,10 +46,12 @@
             <h1>{{ job.title }}</h1>
             <div class="job-detail-meta">
                 <strong>{{ job.company_name }}</strong>
-                <span>{{ job.location }}</span>
+                <span>📍 {{ job.location|default:"Location not specified" }}</span>
                 <span>Posted {{ job.date_posted|date:"M j, Y" }}</span>
             </div>
-            <div class="job-salary">${{ job.salary }}</div>
+            <div class="job-salary">
+                 ₹{{ job.salary|floatformat:0 }}
+            </div>
         </header>
         <section class="job-detail-body">
             <h2>About this role</h2>

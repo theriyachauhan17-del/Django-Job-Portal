@@ -40,6 +40,7 @@ class JobOwnerRequiredMixin(EmployerRequiredMixin):
 
 
 # Create your views here.
+
 class JobListView(ListView):
     model = Job
     template_name = 'job_list.html'
@@ -47,9 +48,14 @@ class JobListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
         query = self.request.GET.get('q', '').strip()
         location = self.request.GET.get('location', '').strip()
+        company = self.request.GET.get('company', '').strip()
+        min_salary = self.request.GET.get('min_salary', '').strip()
+        max_salary = self.request.GET.get('max_salary', '').strip()
 
+        # Keyword search
         if query:
             queryset = queryset.filter(
                 Q(title__icontains=query)
@@ -58,10 +64,38 @@ class JobListView(ListView):
                 | Q(location__icontains=query)
             )
 
+        # Location filter
         if location:
-            queryset = queryset.filter(location__icontains=location)
+            queryset = queryset.filter(
+                location__icontains=location
+            )
+
+        # Company filter
+        if company:
+            queryset = queryset.filter(
+                company_name__icontains=company
+            )
+
+        # Minimum salary filter
+        if min_salary:
+            try:
+                queryset = queryset.filter(
+                    salary__gte=min_salary
+                )
+            except (ValueError, TypeError):
+                pass
+
+        # Maximum salary filter
+        if max_salary:
+            try:
+                queryset = queryset.filter(
+                    salary__lte=max_salary
+                )
+            except (ValueError, TypeError):
+                pass
 
         return queryset
+
 
 class JobDetailView(DetailView):
     model = Job
@@ -100,10 +134,17 @@ class JobDeleteView(JobOwnerRequiredMixin, DeleteView):
 @login_required
 @require_POST
 def apply_to_job(request, pk):
-    job = get_object_or_404(Job, pk=pk)
-    Application.objects.get_or_create(job=job, applicant=request.user)
-    return redirect('jobs:job_detail', pk=pk)
+    if request.user.role != 'seeker':
+        raise PermissionDenied("Only job seekers can apply for jobs.")
 
+    job = get_object_or_404(Job, pk=pk)
+
+    Application.objects.get_or_create(
+        job=job,
+        applicant=request.user
+    )
+
+    return redirect('jobs:job_detail', pk=pk)
 
 @login_required
 def employer_dashboard(request):

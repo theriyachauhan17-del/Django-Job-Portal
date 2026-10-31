@@ -1,32 +1,81 @@
+
 {% extends 'base.html' %}
 
-{% block title %}Job Portal{% endblock %}
+{% block title %}Find Your Next Opportunity | Job Portal{% endblock %}
 
 {% block content %}
+
 <style>
     body {
-        background: linear-gradient(180deg, #eef4ff 0%, #f8fafc 100%);
+        background: #f4f7fc;
+        color: #172033;
     }
 
+    .content {
+        padding-bottom: 45px;
+    }
+
+    .home-wrapper {
+        max-width: 1320px;
+        margin: 0 auto;
+    }
+
+    /* HERO SECTION */
+
     .hero {
-        background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(125deg, #142b49, #1d416b);
+        color: #fff;
         border-radius: 22px;
-        padding: 42px 32px;
-        margin-bottom: 30px;
-        border: 1px solid rgba(37, 99, 235, 0.08);
+        padding: 65px 55px;
+        margin-bottom: 28px;
+        box-shadow: 0 15px 35px rgba(20, 43, 73, 0.14);
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        right: -90px;
+        top: -130px;
+        background: rgba(255,255,255,0.06);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 720px;
+    }
+
+    .hero-tag {
+        display: inline-block;
+        padding: 7px 13px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        margin-bottom: 18px;
     }
 
     .hero h1 {
-        margin: 0 0 14px;
-        font-size: 2.8rem;
-        line-height: 1.1;
+        font-size: clamp(2.2rem, 5vw, 3.5rem);
+        line-height: 1.12;
+        margin: 0 0 18px;
+        font-weight: 800;
+        letter-spacing: -1.5px;
     }
 
     .hero p {
-        margin: 0 0 24px;
-        font-size: 1.08rem;
-        color: #374151;
-        max-width: 720px;
+        color: #d7e4f2;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        max-width: 600px;
+        margin: 0 0 27px;
     }
 
     .hero-actions {
@@ -37,166 +86,717 @@
 
     .hero-actions a {
         display: inline-block;
+        padding: 13px 21px;
+        border-radius: 9px;
         text-decoration: none;
-        padding: 12px 18px;
-        border-radius: 10px;
+        font-size: 14px;
         font-weight: 700;
+        transition: 0.2s ease;
     }
 
     .hero-actions a.primary {
-        background: #111827;
-        color: white;
+        background: #fff;
+        color: #17365b;
     }
 
     .hero-actions a.secondary {
-        background: white;
-        color: #111827;
-        border: 1px solid #d1d5db;
+        background: #2563eb;
+        color: white;
     }
 
+    .hero-actions a:hover {
+        transform: translateY(-2px);
+        opacity: 0.92;
+    }
+
+    /* TOP SEARCH SECTION */
+
     .search-panel {
-        background: white;
-        border-radius: 18px;
-        padding: 20px;
-        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-        margin-bottom: 26px;
+        background: #fff;
+        padding: 22px;
+        border-radius: 17px;
+        margin-bottom: 36px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        border: 1px solid #edf0f5;
+    }
+
+    .search-heading {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0 0 15px;
+        color: #172b46;
     }
 
     .search-row {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 0.8fr 0.8fr auto;
+        gap: 10px;
         align-items: center;
     }
 
-    .search-row input,
-    .search-row select {
-        flex: 1;
-        min-width: 180px;
-        padding: 14px 16px;
-        border: 1px solid #d1d5db;
-        border-radius: 12px;
-        font: inherit;
-        background: #fff;
+    .search-row input {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 15px 16px;
+        border: 1px solid #dce3ec;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    .search-row input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
     }
 
     .search-row button {
         border: none;
-        background: linear-gradient(135deg, #0f172a, #1f2937);
+        background: #17365b;
+        color: #fff;
+        padding: 14px 26px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .search-row button:hover {
+        background: #2563eb;
+    }
+
+    .clear-search {
+        display: inline-block;
+        margin-top: 12px;
+        font-size: 13px;
+        color: #2563eb;
+        text-decoration: none;
+    }
+
+    /* JOB SECTION */
+
+    .jobs-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .jobs-heading h2 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: #172b46;
+        font-weight: 800;
+    }
+
+    .job-count {
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .jobs-layout {
+        display: grid;
+        grid-template-columns: 245px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+    }
+
+    /* SIDEBAR FILTERS */
+
+    .filter-panel {
+        background: #fff;
+        border: 1px solid #e8edf4;
+        border-radius: 15px;
+        padding: 21px;
+        box-shadow: 0 8px 25px rgba(15,23,42,0.04);
+    }
+
+    .filter-panel h3 {
+        font-size: 16px;
+        margin: 0 0 17px;
+        color: #172b46;
+    }
+
+    .sidebar-filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .sidebar-filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .sidebar-filter-group label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .sidebar-filter-group input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px 12px;
+        border: 1px solid #dce3ec;
+        border-radius: 8px;
+        font-size: 13px;
+        outline: none;
+    }
+
+    .sidebar-filter-group input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .sidebar-filter-button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #17365b;
         color: white;
-        padding: 14px 20px;
-        border-radius: 12px;
         font-weight: 700;
         cursor: pointer;
     }
 
-    .jobs-header {
-        margin: 28px 0 18px;
-        font-size: 1.9rem;
+    .sidebar-filter-button:hover {
+        background: #2563eb;
     }
+
+    .sidebar-clear {
+        text-align: center;
+        color: #2563eb;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    /* JOB CARDS */
 
     .jobs-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 22px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 17px;
     }
 
     .job-card {
-        background: white;
-        border-radius: 18px;
-        padding: 22px;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-        border: 1px solid rgba(148, 163, 184, 0.18);
+        display: flex;
+        flex-direction: column;
+        min-height: 280px;
+        background: #fff;
+        border: 1px solid #e7ecf3;
+        border-radius: 15px;
+        padding: 21px;
+        transition: 0.22s ease;
+        box-shadow: 0 7px 20px rgba(15,23,42,0.035);
+    }
+
+    .job-card:hover {
+        transform: translateY(-4px);
+        border-color: #c5d7f3;
+        box-shadow: 0 14px 28px rgba(15,23,42,0.08);
+    }
+
+    .job-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .company-icon {
+        width: 43px;
+        height: 43px;
+        flex-shrink: 0;
+        border-radius: 11px;
+        background: #eaf1fc;
+        color: #1d4e89;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        font-weight: 800;
     }
 
     .job-card h3 {
-        margin: 0 0 10px;
-        font-size: 1.4rem;
+        font-size: 17px;
+        line-height: 1.4;
+        margin: 0 0 5px;
+        color: #172b46;
     }
 
-    .meta {
-        color: #4b5563;
-        line-height: 1.7;
-        margin-bottom: 12px;
+    .company-name {
+        font-size: 13px;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .job-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 13px;
+        color: #64748b;
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    .job-description {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.65;
+        margin-bottom: 17px;
+        min-height: 65px;
+    }
+
+    .job-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        border-top: 1px solid #edf0f5;
+        padding-top: 15px;
+        margin-top: auto;
     }
 
     .salary {
-        margin-bottom: 12px;
-        color: #0f766e;
+        color: #176b59;
+        font-size: 14px;
         font-weight: 800;
-        font-size: 1.1rem;
     }
 
-    .job-card a {
+    .view-job {
         display: inline-block;
+        background: #17365b;
+        color: #fff;
+        padding: 9px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
         text-decoration: none;
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+
+    .view-job:hover {
+        background: #2563eb;
         color: white;
-        padding: 10px 14px;
-        border-radius: 10px;
+    }
+
+    /* EMPTY STATE */
+
+    .empty-state {
+        background: #fff;
+        border: 1px solid #e8edf4;
+        border-radius: 15px;
+        padding: 55px 20px;
+        text-align: center;
+        grid-column: 1 / -1;
+    }
+
+    .empty-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+
+    .empty-state h3 {
+        color: #172b46;
+        margin: 0 0 8px;
+        font-size: 20px;
+    }
+
+    .empty-state p {
+        color: #64748b;
+        font-size: 14px;
+        margin: 0 0 18px;
+    }
+
+    .empty-state a {
+        display: inline-block;
+        background: #17365b;
+        color: white;
+        padding: 10px 18px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 13px;
         font-weight: 700;
     }
 
-    .empty {
-        background: white;
-        border-radius: 16px;
-        padding: 34px 20px;
-        text-align: center;
-        color: #4b5563;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.04);
+    /* RESPONSIVE DESIGN */
+
+    @media (max-width: 1100px) {
+        .search-row {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 850px) {
+        .jobs-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-panel {
+            display: none;
+        }
+
+        .jobs-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        .hero {
+            padding: 38px 23px;
+            border-radius: 16px;
+        }
+
+        .hero h1 {
+            font-size: 2.25rem;
+        }
+
+        .search-panel {
+            padding: 16px;
+        }
+
+        .search-row {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .search-row input,
+        .search-row button {
+            width: 100%;
+        }
+
+        .jobs-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .jobs-heading h2 {
+            font-size: 1.5rem;
+        }
+
+        .job-card {
+            padding: 18px;
+        }
     }
 </style>
 
-<section class="hero">
-    <h1>Find your next opportunity</h1>
-    <p>Explore exciting roles from top companies and discover career opportunities that match your skills, ambition, and experience.</p>
-    <div class="hero-actions">
-        {% if user.is_authenticated and user.role == 'employer' %}
-            <a href="{% url 'jobs:job_create' %}" class="primary">Post a Job</a>
-        {% else %}
-            <a href="#jobs" class="primary">Browse Jobs</a>
-        {% endif %}
-        <a href="{% url 'accounts:signup' %}" class="secondary">Create Account</a>
-    </div>
-</section>
+<div class="home-wrapper">
 
-<section id="jobs">
-    <div class="search-panel">
-        <form method="get">
-            <div class="search-row">
-                <input type="text" name="q" placeholder="Search jobs, companies, skills" value="{{ request.GET.q|default:'' }}">
-                <select name="location">
-                    <option value="">All locations</option>
-                    <option value="Remote" {% if request.GET.location == 'Remote' %}selected{% endif %}>Remote</option>
-                    <option value="New York" {% if request.GET.location == 'New York' %}selected{% endif %}>New York</option>
-                    <option value="London" {% if request.GET.location == 'London' %}selected{% endif %}>London</option>
-                </select>
-                <button type="submit">Search</button>
+    <!-- HERO SECTION -->
+
+    <section class="hero">
+        <div class="hero-content">
+
+            <span class="hero-tag">
+                YOUR NEXT CAREER STARTS HERE
+            </span>
+
+            <h1>Find your next opportunity</h1>
+
+            <p>
+                Discover exciting career opportunities from different
+                companies. Find the right role that matches your skills,
+                experience and ambitions.
+            </p>
+
+            <div class="hero-actions">
+
+                <a href="#jobs" class="primary">
+                    Browse Jobs
+                </a>
+
+                {% if user.is_authenticated and user.role == 'employer' %}
+                    <a href="{% url 'jobs:job_create' %}" class="secondary">
+                        Post a Job
+                    </a>
+                {% elif not user.is_authenticated %}
+                    <a href="{% url 'accounts:signup' %}" class="secondary">
+                        Create Account
+                    </a>
+                {% endif %}
+
             </div>
+        </div>
+    </section>
+
+    <!-- TOP SEARCH SECTION -->
+
+    <section class="search-panel">
+
+        <h3 class="search-heading">
+            Find the right job for you
+        </h3>
+
+        <form method="get">
+
+            <div class="search-row">
+
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Job title or keyword"
+                    value="{{ request.GET.q|default:'' }}"
+                    aria-label="Search jobs"
+                >
+
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="City or remote"
+                    value="{{ request.GET.location|default:'' }}"
+                    aria-label="Search by location"
+                >
+
+                <input
+                    type="text"
+                    name="company"
+                    placeholder="Company name"
+                    value="{{ request.GET.company|default:'' }}"
+                    aria-label="Search by company"
+                >
+
+                <input
+                    type="number"
+                    name="min_salary"
+                    placeholder="Min salary"
+                    min="0"
+                    step="0.01"
+                    value="{{ request.GET.min_salary|default:'' }}"
+                    aria-label="Minimum salary"
+                >
+
+                <input
+                    type="number"
+                    name="max_salary"
+                    placeholder="Max salary"
+                    min="0"
+                    step="0.01"
+                    value="{{ request.GET.max_salary|default:'' }}"
+                    aria-label="Maximum salary"
+                >
+
+                <button type="submit">
+                    Search Jobs
+                </button>
+
+            </div>
+
+            {% if request.GET.q or request.GET.location or request.GET.company or request.GET.min_salary or request.GET.max_salary %}
+                <a href="{% url 'jobs:job_list' %}" class="clear-search">
+                    Clear all filters
+                </a>
+            {% endif %}
+
         </form>
-    </div>
+    </section>
 
-    <h2 class="jobs-header">Latest Jobs</h2>
+    <!-- JOB LISTINGS -->
 
-    {% if all_jobs %}
-        <div class="jobs-grid">
-            {% for job in all_jobs %}
-                <div class="job-card">
-                    <h3>{{ job.title }}</h3>
-                    <div class="meta">
-                        <strong>{{ job.company_name }}</strong><br>
-                        {{ job.location }}
+    <section id="jobs">
+
+        <div class="jobs-heading">
+
+            <h2>Latest Opportunities</h2>
+
+            <span class="job-count">
+                {% if all_jobs %}
+                    {{ all_jobs|length }}
+                    {% if all_jobs|length == 1 %}
+                        job found
+                    {% else %}
+                        jobs found
+                    {% endif %}
+                {% else %}
+                    No matching jobs found
+                {% endif %}
+            </span>
+
+        </div>
+
+        <div class="jobs-layout">
+
+            <!-- SIDEBAR FILTERS -->
+
+            <aside class="filter-panel">
+
+                <h3>Filter Jobs</h3>
+
+                <form method="get" class="sidebar-filter-form">
+
+                    <div class="sidebar-filter-group">
+                        <label for="sidebar-q">Keyword</label>
+                        <input
+                            type="text"
+                            id="sidebar-q"
+                            name="q"
+                            placeholder="Job title or skills"
+                            value="{{ request.GET.q|default:'' }}"
+                        >
                     </div>
-                    <div class="salary">${{ job.salary }}</div>
-                    <div class="meta">{{ job.description|truncatewords:16 }}</div>
-                    <a href="{% url 'jobs:job_detail' job.pk %}">View Job</a>
-                </div>
-            {% endfor %}
+
+                    <div class="sidebar-filter-group">
+                        <label for="sidebar-location">Location</label>
+                        <input
+                            type="text"
+                            id="sidebar-location"
+                            name="location"
+                            placeholder="Enter city"
+                            value="{{ request.GET.location|default:'' }}"
+                        >
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label for="sidebar-company">Company</label>
+                        <input
+                            type="text"
+                            id="sidebar-company"
+                            name="company"
+                            placeholder="Company name"
+                            value="{{ request.GET.company|default:'' }}"
+                        >
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label for="sidebar-min-salary">Minimum Salary (₹)</label>
+                        <input
+                            type="number"
+                            id="sidebar-min-salary"
+                            name="min_salary"
+                            min="0"
+                            step="0.01"
+                            placeholder="Minimum salary"
+                            value="{{ request.GET.min_salary|default:'' }}"
+                        >
+                    </div>
+
+                    <div class="sidebar-filter-group">
+                        <label for="sidebar-max-salary">Maximum Salary (₹)</label>
+                        <input
+                            type="number"
+                            id="sidebar-max-salary"
+                            name="max_salary"
+                            min="0"
+                            step="0.01"
+                            placeholder="Maximum salary"
+                            value="{{ request.GET.max_salary|default:'' }}"
+                        >
+                    </div>
+
+                    <button type="submit" class="sidebar-filter-button">
+                        Apply Filters
+                    </button>
+
+                    <a href="{% url 'jobs:job_list' %}" class="sidebar-clear">
+                        Clear All Filters
+                    </a>
+
+                </form>
+            </aside>
+
+            <!-- JOB CARDS -->
+
+            <div class="jobs-grid">
+
+                {% if all_jobs %}
+
+                    {% for job in all_jobs %}
+
+                        <article class="job-card">
+
+                            <div class="job-top">
+
+                                <div>
+                                    <h3>{{ job.title }}</h3>
+
+                                    <p class="company-name">
+                                        {{ job.company_name }}
+                                    </p>
+                                </div>
+
+                                <div class="company-icon" aria-hidden="true">
+                                    {{ job.company_name|first|upper }}
+                                </div>
+
+                            </div>
+
+                            <div class="job-meta">
+
+                                <span>
+                                    📍 {{ job.location|default:"Location not specified" }}
+                                </span>
+
+                                <span>
+                                    💼 Job Opportunity
+                                </span>
+
+                                <span>
+                                    📅 Posted:
+                                    <time datetime="{{ job.date_posted|date:'Y-m-d' }}">
+                                        {{ job.date_posted|date:"d M Y" }}
+                                    </time>
+                                </span>
+
+                            </div>
+
+                            <div class="job-description">
+                                {{ job.description|truncatewords:20 }}
+                            </div>
+
+                            <div class="job-footer">
+
+                                <span class="salary">
+                                    ₹{{ job.salary|floatformat:0 }}
+                                </span>
+
+                                <a
+                                    href="{% url 'jobs:job_detail' job.pk %}"
+                                    class="view-job"
+                                >
+                                    View Details →
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            🔍
+                        </div>
+
+                        <h3>No jobs available right now</h3>
+
+                        <p>
+                            We couldn't find any matching jobs.
+                            Try another keyword or location.
+                        </p>
+
+                        <a href="{% url 'jobs:job_list' %}">
+                            View All Jobs
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
         </div>
-    {% else %}
-        <div class="empty">
-            <p>No jobs available yet. Check back soon.</p>
-        </div>
-    {% endif %}
-</section>
+
+    </section>
+
+</div>
+
 {% endblock %}

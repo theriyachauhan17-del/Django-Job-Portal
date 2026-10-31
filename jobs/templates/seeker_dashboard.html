@@ -43,9 +43,9 @@
     .applications-list {
         overflow: hidden;
         border: 1px solid #e0e6ee;
-        border-radius: 8px;
+        border-radius: 18px;
         background: #fff;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
     }
 
     .applications-list-header {
@@ -194,6 +194,7 @@
                         <p class="application-company">{{ application.job.company_name }}</p>
                         <div class="application-meta">
                             <span>{{ application.job.location }}</span>
+                            <span>💰 ₹{{ application.job.salary|floatformat:0 }}</span>
                             <span>Applied {{ application.date_applied|date:"M j, Y" }}</span>
                         </div>
                     </div>
